@@ -1,10 +1,10 @@
 terraform {
   required_providers {
     kubernetes = {
-      source  = "hashicorp/kubernetes"      
+      source = "hashicorp/kubernetes"
     }
     helm = {
-      source  = "hashicorp/helm"      
+      source = "hashicorp/helm"
     }
     kubectl = {
       source  = "alekc/kubectl"
@@ -15,7 +15,7 @@ terraform {
 
 locals {
   kubeconfig = pathexpand("~/.kube/config")
-  
+
   # Define contexts as a map for cleaner access
   contexts = {
     hub    = "kind-demo"
@@ -46,7 +46,7 @@ provider "kubernetes" {
 # 2. Define Helm Providers (referencing the kubernetes provider blocks)
 provider "helm" {
   alias = "hub"
-  kubernetes =  {
+  kubernetes = {
     config_path    = local.kubeconfig
     config_context = local.contexts.hub
   }
@@ -54,7 +54,7 @@ provider "helm" {
 
 provider "helm" {
   alias = "spoke1"
-  kubernetes =  {
+  kubernetes = {
     config_path    = local.kubeconfig
     config_context = local.contexts.spoke1
   }
@@ -62,7 +62,7 @@ provider "helm" {
 
 provider "helm" {
   alias = "spoke2"
-  kubernetes   ={
+  kubernetes = {
     config_path    = local.kubeconfig
     config_context = local.contexts.spoke2
   }
