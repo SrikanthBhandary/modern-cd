@@ -1,23 +1,42 @@
-resource "kubectl_manifest" "gateway_api" {
-  provider   = kubectl.hub
-  yaml_body  = file("gateway/gateway-api.yaml")
-  depends_on = [module.demo_cluster]
-}
+resource "kubernetes_manifest" "envoy_gateway_application" {
+  provider = kubernetes.hub
 
-resource "helm_release" "envoy_gateway" {
-  provider = helm.hub
+  manifest = {
+    apiVersion = "argoproj.io/v1alpha1"
+    kind       = "Application"
 
-  name      = "envoy-gateway"
-  namespace = "envoy-gateway-system"
+    metadata = {
+      name      = "envoy-gateway"
+      namespace = "argocd"
+    }
 
-  create_namespace = true
+    spec = {
+      project = "default"
 
-  repository = "oci://docker.io/envoyproxy"
-  chart      = "gateway-helm"
+      source = {
+        chart          = "gateway-helm"
+        repoURL        = "docker.io/envoyproxy"
+        targetRevision = "v1.8.2"
+      }
 
-  depends_on = [
-    kubectl_manifest.gateway_api
-  ]
+      destination = {
+        namespace = "envoy-gateway-system"
+        server    = "https://kubernetes.default.svc"
+      }
+
+      syncPolicy = {
+        syncOptions = [
+          "CreateNamespace=true",
+          "ServerSideApply=true"
+        ]
+
+        automated = {
+          prune    = true
+          selfHeal = true
+        }
+      }
+    }
+  }
 }
 
 resource "kubernetes_manifest" "main_gateway" {
@@ -46,7 +65,7 @@ resource "kubernetes_manifest" "main_gateway" {
   }
 
   depends_on = [
-    helm_release.envoy_gateway
+    kubernetes_manifest.envoy_gateway_application, kubernetes_manifest.envoy_gateway_class
   ]
 }
 
@@ -67,7 +86,7 @@ resource "kubernetes_manifest" "envoy_gateway_class" {
   }
 
   depends_on = [
-    helm_release.envoy_gateway
+    kubernetes_manifest.envoy_gateway_application
   ]
 }
 

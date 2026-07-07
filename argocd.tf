@@ -19,30 +19,6 @@ resource "helm_release" "argocd" {
   timeout = 600
 }
 
-resource "helm_release" "argocd_spoke_1" {
-  depends_on       = [module.spoke_1]
-  provider         = helm.spoke1
-  name             = "argocd"
-  repository       = "https://argoproj.github.io/argo-helm"
-  chart            = "argo-cd"
-  namespace        = "argocd"
-  create_namespace = true
-
-  timeout = 600
-}
-
-resource "helm_release" "argocd_spoke_2" {
-  depends_on       = [module.spoke_2]
-  provider         = helm.spoke2
-  name             = "argocd"
-  repository       = "https://argoproj.github.io/argo-helm"
-  chart            = "argo-cd"
-  namespace        = "argocd"
-  create_namespace = true
-
-  timeout = 600
-}
-
 resource "kubernetes_secret_v1" "cluster_spoke1" {
   provider = kubernetes.hub
 

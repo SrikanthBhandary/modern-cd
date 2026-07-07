@@ -85,3 +85,13 @@ terraform destroy
 - `helm_release.argocd` sets `server.insecure = true`, which disables TLS on the hub's ArgoCD server. This is fine for local kind clusters but should not be carried into any environment reachable outside your machine.
 - Provider blocks (`kubernetes`, `helm`) are duplicated once per cluster (hub/spoke1/spoke2) because Terraform provider blocks don't support `for_each`/`count`. Adding a fourth cluster means adding a fourth set of provider blocks by hand.
 - The `kind-cluster` module has no `output` values currently — nothing downstream depends on it yet.
+
+## How to Run?
+```
+kind get clusters | xargs -I{} kind delete cluster --name {}   # belt-and-suspenders, clears anything lingering
+rm -f terraform.tfstate terraform.tfstate.backup
+terraform init -upgrade
+terraform apply -target=module.demo_cluster -target=module.spoke_1 -target=module.spoke_2
+kubectl config get-contexts   # confirm all 3 kind-* contexts exist before continuing
+terraform apply
+```
