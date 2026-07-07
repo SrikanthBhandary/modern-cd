@@ -59,6 +59,12 @@ resource "kubernetes_manifest" "main_gateway" {
           name     = "http"
           protocol = "HTTP"
           port     = 80
+
+          allowedRoutes = {
+            namespaces = {
+              from = "All"
+            }
+          }
         }
       ]
     }
@@ -125,4 +131,49 @@ resource "kubernetes_manifest" "argocd_route" {
   depends_on = [
     kubernetes_manifest.main_gateway
   ]
+}
+
+
+resource "kubernetes_manifest" "canary_route" {
+  provider = kubernetes.hub
+
+  manifest = {
+    apiVersion = "gateway.networking.k8s.io/v1"
+    kind       = "HTTPRoute"
+
+    metadata = {
+      name      = "canary-demo"
+      namespace = "canary-demo"
+    }
+
+    spec = {
+      parentRefs = [
+        {
+          name      = "main-gateway"
+          namespace = "argocd"
+        }
+      ]
+
+      hostnames = [
+        "canary.local"
+      ]
+
+      rules = [
+        {
+          backendRefs = [
+            {
+              name   = "canary-demo-stable"
+              port   = 80
+              weight = 100
+            },
+            {
+              name   = "canary-demo-canary"
+              port   = 80
+              weight = 0
+            }
+          ]
+        }
+      ]
+    }
+  }
 }
