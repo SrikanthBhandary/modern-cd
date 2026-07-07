@@ -1,0 +1,12 @@
+gateway:
+  name: main-gateway
+  namespace: argocd
+
+argocd:
+  service: argocd-server
+  hostname: argocd.local
+
+canary:
+  hostname: canary.local
+  stableService: canary-demo-stable
+  canaryService: canary-demo-canary

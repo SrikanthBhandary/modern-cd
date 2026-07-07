@@ -1,8 +1,15 @@
 variable "cluster_config_file" {
   description = "Path to the kind cluster config used by all clusters"
   type        = string
-  default     = "config/dev/config.yaml"
+  default     = "../config/dev/config.yaml"
 }
+
+variable "hub_config_file" {
+  description = "Path to the kind cluster config used by all clusters"
+  type        = string
+  default     = "../config/dev/node_port.yaml"
+}
+
 
 variable "clusters" {
   description = "Cluster name overrides for the hub and each spoke"
@@ -12,7 +19,7 @@ variable "clusters" {
     spoke2 = string
   })
   default = {
-    hub    = "demo"
+    hub    = "hub"
     spoke1 = "spoke-1"
     spoke2 = "spoke-2"
   }

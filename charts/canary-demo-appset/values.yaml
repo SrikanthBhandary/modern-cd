@@ -1,0 +1,5 @@
+repoURL: https://github.com/SrikanthBhandary/modern-cd.git
+targetRevision: HEAD
+path: apps/canary-demo
+project: default
+namespace: canary-demo

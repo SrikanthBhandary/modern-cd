@@ -1,0 +1,9 @@
+application:
+  chart: gateway-helm
+  version: v1.8.2
+  repo: docker.io/envoyproxy
+
+gateway:
+  name: main-gateway
+  namespace: argocd
+  class: eg

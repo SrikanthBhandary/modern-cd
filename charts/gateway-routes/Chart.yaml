@@ -1,0 +1,5 @@
+apiVersion: v2
+name: gateway-routes
+description: Bootstrap Envoy Gateway on the hub cluster
+type: application
+version: 0.1.0

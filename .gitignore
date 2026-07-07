@@ -4,3 +4,4 @@ terraform.tfstate
 terraform.tfstate.1783413848.backup
 terraform.tfstate.backup
 .DS_Store
+.terraform.lock.hcl

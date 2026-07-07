@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: canary-demo
+  namespace: argocd
+spec:
+  generators:
+    - clusters: {}
+
+  template:
+    metadata:
+      name: "{{`{{name}}`}}-canary-demo"
+
+    spec:
+      project: {{ .Values.project }}
+
+      source:
+        repoURL: {{ .Values.repoURL }}
+        targetRevision: {{ .Values.targetRevision }}
+        path: {{ .Values.path }}
+
+      destination:
+        server: "{{`{{server}}`}}"
+        namespace: {{ .Values.namespace }}
+
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+
+        syncOptions:
+          - CreateNamespace=true
