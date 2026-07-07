@@ -1,3 +1,4 @@
+# TODO : move this as the applicationset.action
 resource "helm_release" "argo_rollouts_hub" {  
   provider         = helm.hub
   name             = "argo-rollouts"
