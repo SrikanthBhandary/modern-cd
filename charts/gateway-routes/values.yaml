@@ -10,3 +10,9 @@ canary:
   hostname: canary.local
   stableService: canary-demo-stable
   canaryService: canary-demo-canary
+
+prometheus:
+  hostname: prometheus.local
+
+grafana:
+  hostname: grafana.local

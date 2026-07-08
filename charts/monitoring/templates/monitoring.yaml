@@ -1,0 +1,48 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: kube-prometheus-stack
+  namespace: argocd
+
+spec:
+  generators:
+    - clusters: {}
+
+  template:
+    metadata:
+      name: "{{`{{name}}`}}-monitoring"
+      annotations:
+        argocd.argoproj.io/sync-wave: "1"
+
+    spec:
+      project: default
+
+      source:
+        repoURL: https://prometheus-community.github.io/helm-charts
+        chart: kube-prometheus-stack
+        targetRevision: "87.8"
+        helm:
+          values: |
+            crds:
+              enabled: false
+            grafana:
+              enabled: true
+
+            prometheus:
+              enabled: true
+              prometheusSpec:
+                retention: 7d
+
+      destination:
+        server: "{{`{{server}}`}}"
+        namespace: monitoring
+
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
+

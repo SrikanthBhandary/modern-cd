@@ -1,0 +1,19 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+
+metadata:
+  name: grafana
+  namespace: monitoring
+
+spec:
+  parentRefs:
+    - name: {{ .Values.gateway.name }}
+      namespace: {{ .Values.gateway.namespace }}
+
+  hostnames:
+    - {{ .Values.grafana.hostname }}
+
+  rules:
+    - backendRefs:
+        - name: in-cluster-monitoring-grafana
+          port: 80

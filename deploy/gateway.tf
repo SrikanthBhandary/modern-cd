@@ -24,12 +24,15 @@ resource "helm_release" "gateway_routes" {
 
   name      = "gateway-routes"
   chart     = "../charts/gateway-routes"
-
   namespace = "argocd"
 
   depends_on = [
     helm_release.envoy_gateway_bootstrap, helm_release.envoy_gateway_crd
   ]
-  create_namespace = true
-  
+  create_namespace = true  
+  values = [
+    file("../charts/gateway-routes/values.yaml")
+  ]
 }
+
+# TODO: install envory for other clusters also

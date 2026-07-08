@@ -171,3 +171,9 @@ rm -f terraform.tfstate terraform.tfstate.backup
 terraform init -upgrade
 terraform apply
 ```
+
+kubectl argo rollouts get rollout canary-demo -n canary-demo
+
+ kubectl --context kind-hub \
+-n envoy-gateway-system \
+port-forward svc/envoy-argocd-main-gateway-4aaefa5f 8080:80
