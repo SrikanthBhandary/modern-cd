@@ -30,7 +30,7 @@ spec:
       trafficRouting:
         plugins:
           gatewayAPI:
-          httpRoute: canary-demo
+            httpRoute: canary-demo
       steps:
         - setWeight: 20
         - pause: { duration: 30s }
