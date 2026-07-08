@@ -27,10 +27,10 @@ spec:
     canary:
       stableService: canary-demo-stable
       canaryService: canary-demo-canary
-      # trafficRouting:
-      # plugins:
-      #   argoproj-labs/gatewayAPI:
-      #     httpRoute: canary-demo
+      trafficRouting:
+      plugins:
+        argoproj-labs/gatewayAPI:
+          httpRoute: canary-demo
       steps:
         - setWeight: 20
         - pause: { duration: 30s }
