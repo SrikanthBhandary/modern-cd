@@ -6,6 +6,9 @@ resource "helm_release" "argo_rollouts_hub" {
   chart            = "argo-rollouts"
   namespace        = "argo-rollouts"
   create_namespace = true
+  values = [    
+    file("${path.module}/../config/dev/argo_values.yaml")
+  ]
 }
 
 resource "helm_release" "argo_rollouts_spoke1" {
@@ -15,6 +18,9 @@ resource "helm_release" "argo_rollouts_spoke1" {
   chart            = "argo-rollouts"
   namespace        = "argo-rollouts"
   create_namespace = true
+  values = [
+    file("${path.module}/../config/dev/argo_values.yaml")
+  ]
 }
 
 resource "helm_release" "argo_rollouts_spoke2" {
@@ -24,4 +30,7 @@ resource "helm_release" "argo_rollouts_spoke2" {
   chart            = "argo-rollouts"
   namespace        = "argo-rollouts"
   create_namespace = true
+  values = [
+    file("${path.module}/../config/dev/argo_values.yaml")
+  ]
 }

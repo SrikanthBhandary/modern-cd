@@ -29,7 +29,7 @@ spec:
       canaryService: canary-demo-canary
       trafficRouting:
         plugins:
-          gatewayAPI:
+          argoproj-labs/gatewayAPI:
             httpRoute: canary-demo
       steps:
         - setWeight: 20
