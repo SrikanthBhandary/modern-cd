@@ -40,6 +40,7 @@ resource "helm_release" "progressive_demo" {
   values = [
     file("../charts/progressive-demo-appset/values.yaml")
   ]
+  create_namespace = true
 
 
   depends_on = [

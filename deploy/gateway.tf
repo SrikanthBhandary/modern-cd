@@ -35,4 +35,4 @@ resource "helm_release" "gateway_routes" {
   ]
 }
 
-# TODO: install envory for other clusters also
+# # TODO: install envory for other clusters also
