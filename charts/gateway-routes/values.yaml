@@ -16,3 +16,6 @@ prometheus:
 
 grafana:
   hostname: grafana.local
+
+progressive:
+  hostname: progressive.local

@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+
+metadata:
+  name: success-rate
+  namespace: podinfo
+
+spec:
+  metrics:
+    - name: success-rate
+
+      interval: 15s
+      count: 3
+
+      successCondition: result[0] > 0.99
+
+      provider:
+        prometheus:
+          address: http://prometheus-operated.monitoring.svc.cluster.local:9090
+
+          query: |
+            sum(rate(http_requests_total{job="podinfo-canary",status!~"5.."}[1m]))
+            /
+            sum(rate(http_requests_total{job="podinfo-canary"}[1m]))

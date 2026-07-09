@@ -30,3 +30,22 @@ resource "helm_release" "monitoring_stack" {
     kubernetes_secret_v1.cluster_spoke2
   ]
 }
+
+resource "helm_release" "progressive_demo" {
+  provider = helm.hub
+  name      = "progressive-demo"
+  chart     = "../charts/progressive-demo-appset"
+  namespace = "argocd"
+
+  values = [
+    file("../charts/progressive-demo-appset/values.yaml")
+  ]
+
+
+  depends_on = [
+    helm_release.argo_rollouts_hub,
+    kubernetes_secret_v1.cluster_spoke1,
+    kubernetes_secret_v1.cluster_spoke2
+  ]
+}
+

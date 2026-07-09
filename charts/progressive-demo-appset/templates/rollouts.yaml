@@ -1,0 +1,52 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: podinfo
+  namespace: podinfo
+
+spec:
+  replicas: 5
+
+  revisionHistoryLimit: 2
+
+  selector:
+    matchLabels:
+      app: podinfo
+
+  template:
+    metadata:
+      labels:
+        app: podinfo
+
+    spec:
+      containers:
+        - name: podinfo
+          image: ghcr.io/stefanprodan/podinfo:6.9.4
+
+          ports:
+            - containerPort: 9898
+
+  strategy:
+    canary:
+      stableService: podinfo-stable
+      canaryService: podinfo-canary
+      trafficRouting:
+        plugins:
+          argoproj-labs/gatewayAPI:
+              httpRoute: progressive
+              namespace: podinfo
+
+      analysis:
+        templates:
+          - templateName: success-rate
+
+      steps:
+        - setWeight: 20
+        - pause:
+            duration: 30s
+
+        - setWeight: 50
+        - pause:
+            duration: 30s
+
+        - setWeight: 100

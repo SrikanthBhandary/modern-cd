@@ -1,0 +1,44 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: podinfo
+  namespace: argocd
+
+spec:
+  generators:
+    - clusters: {}
+
+  template:
+    metadata:
+      name: "{{`{{name}}`}}-podinfo"
+
+    spec:
+      project: default
+
+      source:
+        repoURL: https://stefanprodan.github.io/podinfo
+        chart: podinfo
+        targetRevision: "6.9.4"
+
+        helm:
+          values: |
+            replicaCount: 0
+
+            service:
+              type: ClusterIP
+              port: 9898
+
+            ingress:
+              enabled: false
+
+      destination:
+        server: "{{`{{server}}`}}"
+        namespace: podinfo
+
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+
+        syncOptions:
+          - CreateNamespace=true
